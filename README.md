@@ -13,10 +13,16 @@ MoonFraming 是纯 MoonBit 的增量分帧基础库。它把任意字节流恢�
 
 ## 安装与运行
 
-当前可从源码运行；发布 Mooncakes 后可使用 `moon add Yingqingxue/moonframing`。
+发布后可通过 [mooncakes.io](https://mooncakes.io/docs/Morris-C17/moonframing/) 安装：
 
 ```bash
-git clone https://github.com/Yingqingxue/moonframing.git
+moon add Morris-C17/moonframing
+```
+
+也可以从源码运行：
+
+```bash
+git clone https://github.com/Morris-C17/moonframing.git
 cd moonframing
 moon check --deny-warn
 moon build --deny-warn

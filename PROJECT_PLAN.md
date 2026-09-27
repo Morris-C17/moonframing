@@ -3,9 +3,9 @@
 ## 基本信息
 
 - 项目名称：MoonFraming——面向字节流的增量消息分帧组件
-- 参赛者：Yingqingxue（GitHub ID）
+- 参赛者：毛学成（GitHub ID：Morris-C17）
 - 联系方式：在报名问卷中填写本人手机号或邮箱
-- GitHub：https://github.com/Yingqingxue/moonframing
+- GitHub：https://github.com/Morris-C17/moonframing
 - 项目方向：新生态项目建设（网络与协议基础组件）
 - 是否为移植项目：否，原创项目
 
@@ -34,7 +34,7 @@ MoonBit 生态中已有整数编码库和 HTTP 专用协议实现：前者解决
 - 一个公开、使用 Apache-2.0 许可证的 MoonBit 仓库，主分支不少于 10 次有实际内容的提交。
 - 可复用的 MoonFraming 库、协议格式说明、公开 API 文档和至少一个命令行示例。
 - 覆盖正常帧、拆包、粘包、多帧、截断、变长整数溢出、资源上限和 CRC 错误的核心测试；CI 执行 `moon check`、`moon build` 和三后端测试。
-- README 给出安装、最小调用、增量读取方式、错误处理和复现命令；完成审核后发布至 mooncakes.io。
+- README 给出安装、最小调用、增量读取方式、错误处理和复现命令；发布 `0.1.0` 后在干净消费者项目中验证安装和公开 API。
 
 ## 工程边界与实现路径
 

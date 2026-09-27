@@ -1,5 +1,5 @@
 // Generated using `moon info`, DON'T EDIT IT
-package "Yingqingxue/moonframing"
+package "Morris-C17/moonframing"
 
 // Values
 pub fn crc32(Bytes) -> UInt

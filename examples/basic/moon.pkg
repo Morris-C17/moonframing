@@ -1,5 +1,5 @@
 import {
-  "Yingqingxue/moonframing" @frame,
+  "Morris-C17/moonframing" @frame,
 }
 
 pkgtype(kind: "executable")

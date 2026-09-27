@@ -7,5 +7,5 @@
 - [x] CI 覆盖 check、build、test
 - [x] `cmd/main` 提供可运行示例
 - [x] 核心功能测试覆盖，并在 wasm/wasm-gc/js 运行
-- [ ] 发布到 mooncakes.io
+- [ ] `Morris-C17/moonframing@0.1.0` 发布到 mooncakes.io，并通过干净项目安装验证
 - [x] Apache-2.0（OSI 认可）许可证

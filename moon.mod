@@ -9,13 +9,13 @@
 //   "moonbitlang/x@0.4.6",
 // }
 
-name = "Yingqingxue/moonframing"
+name = "Morris-C17/moonframing"
 
 version = "0.1.0"
 
 readme = "README.mbt.md"
 
-repository = "https://github.com/Yingqingxue/moonframing"
+repository = "https://github.com/Morris-C17/moonframing"
 
 license = "Apache-2.0"
 
