@@ -3,7 +3,7 @@
 /// Keep main focused; move logic into the library package.
 /// Run with `moon run cmd/main` from the project root.
 fn main {
-  let stream = @frame.encode_frames([b"hello", b"from", b"MoonFrame"])
+  let stream = @frame.encode_frames([b"hello", b"from", b"MoonFraming"])
   match @frame.decode_all(stream) {
     Ok(frames) => {
       println("decoded frames: \{frames.length()}")

@@ -1,0 +1,48 @@
+// Generated using `moon info`, DON'T EDIT IT
+package "Yingqingxue/moonframing"
+
+// Values
+pub fn crc32(Bytes) -> UInt
+
+pub fn decode_all(Bytes, max_frame_size? : Int) -> Result[Array[Bytes], FrameError]
+
+pub fn decode_checked_frame(Bytes, max_frame_size? : Int) -> Result[(Bytes, Int), FrameError]
+
+pub fn decode_frame(Bytes, max_frame_size? : Int) -> Result[(Bytes, Int), FrameError]
+
+pub fn decode_varint(Bytes, offset? : Int) -> (Int, Int)?
+
+pub fn encode_checked_frame(Bytes) -> Bytes
+
+pub fn encode_frame(Bytes) -> Bytes
+
+pub fn encode_frames(ArrayView[Bytes]) -> Bytes
+
+pub fn encode_varint(Int) -> Bytes
+
+// Errors
+
+// Types and methods
+pub struct Decoder {
+  buffer : Array[Byte]
+  max_frame_size : Int
+  max_buffer_size : Int
+}
+pub fn Decoder::buffered(Self) -> Int
+pub fn Decoder::feed(Self, Bytes) -> Result[Array[Bytes], FrameError]
+pub fn Decoder::finish(Self) -> Result[Unit, FrameError]
+pub fn Decoder::new(max_frame_size? : Int, max_buffer_size? : Int) -> Self
+pub fn Decoder::reset(Self) -> Unit
+
+pub enum FrameError {
+  NeedMore
+  MalformedVarint
+  FrameTooLarge(Int, Int)
+  MissingChecksum
+  ChecksumMismatch(UInt, UInt)
+  BufferLimitExceeded(Int, Int)
+}
+
+// Type aliases
+
+// Traits

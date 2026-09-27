@@ -1,6 +1,6 @@
-# MoonFrame
+# MoonFraming
 
-MoonFrame is a pure-MoonBit framing toolkit for protocols that run over
+MoonFraming is a pure-MoonBit framing toolkit for protocols that run over
 arbitrary byte streams. It separates message boundaries from transport I/O,
 handles fragmented and coalesced input, enforces resource limits before
 payload allocation, and can attach CRC-32 corruption detection.
@@ -28,8 +28,8 @@ moon run cmd/main
 ```mbt check
 ///|
 test {
-  let decoder = @moonframe.Decoder::new(max_frame_size=4096)
-  let wire = @moonframe.encode_frame(b"hello")
+  let decoder = @moonframing.Decoder::new(max_frame_size=4096)
+  let wire = @moonframing.encode_frame(b"hello")
   match decoder.feed(wire) {
     Ok(frames) => assert_true(frames[0] == b"hello")
     Err(_) => fail("valid frame")
@@ -44,7 +44,7 @@ uses `uLEB128(payload_length + 4) || payload || crc32_be`. The length prefix is
 limited to five bytes and the decoder checks the configured payload limit as
 soon as the prefix is complete.
 
-MoonFrame is not a socket or filesystem library. It is designed to compose
+MoonFraming is not a socket or filesystem library. It is designed to compose
 with MoonBit async readers, files, WebSockets, RPC transports, and parsers
 without forcing any particular I/O runtime.
 

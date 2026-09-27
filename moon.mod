@@ -9,13 +9,13 @@
 //   "moonbitlang/x@0.4.6",
 // }
 
-name = "Yingqingxue/moonframe"
+name = "Yingqingxue/moonframing"
 
 version = "0.1.0"
 
 readme = "README.mbt.md"
 
-repository = "https://github.com/Yingqingxue/moonframe"
+repository = "https://github.com/Yingqingxue/moonframing"
 
 license = "Apache-2.0"
 
@@ -23,4 +23,4 @@ keywords = [ "streaming", "framing", "codec", "protocol" ]
 
 preferred_target = "wasm"
 
-description = "Backend-neutral incremental framing primitives for MoonBit"
+description = "Backend-neutral incremental byte-stream framing for MoonBit"
