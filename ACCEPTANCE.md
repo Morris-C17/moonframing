@@ -12,7 +12,7 @@
 - [x] 分隔符 codec 覆盖跨块结束符和资源上限
 - [x] 已写明 tokio-util 参考范围、原链接和 MIT 许可证
 - [x] 已写明威胁边界和资源限制
-- [x] `Morris-C17/moonframing@0.1.0` 已发布到 mooncakes.io，并通过干净项目安装验证
-- [ ] 0.2.0 推送 GitHub 并发布到 mooncakes.io
+- [x] `Morris-C17/moonframing@0.2.0` 已推送 GitHub 并发布到 mooncakes.io
+- [x] 0.2.0 已在全新项目中从注册表安装、编译并通过功能测试
 - [ ] 补足至少 35 项测试并完成两个外部试用记录
 - [x] Apache-2.0（OSI 认可）许可证
