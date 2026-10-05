@@ -52,3 +52,75 @@ pub fn decode_checked_frame(
     }
   }
 }
+
+///|
+fn verify_checked_body(body : Bytes) -> Result[Bytes, FrameError] {
+  if body.length() < 4 {
+    return Err(MissingChecksum)
+  }
+  let end = body.length()
+  let payload = body[:end - 4].to_owned()
+  let expected = (body[end - 4].to_uint() << 24) |
+    (body[end - 3].to_uint() << 16) |
+    (body[end - 2].to_uint() << 8) |
+    body[end - 1].to_uint()
+  let actual = crc32(payload)
+  if actual != expected {
+    Err(ChecksumMismatch(expected, actual))
+  } else {
+    Ok(payload)
+  }
+}
+
+///|
+/// Incremental decoder for CRC-32 protected frames.
+pub struct CheckedDecoder {
+  inner : Decoder
+}
+
+///|
+pub fn CheckedDecoder::new(
+  max_frame_size? : Int = 1048576,
+  max_buffer_size? : Int = max_frame_size + 9,
+) -> CheckedDecoder {
+  CheckedDecoder::{
+    inner: Decoder::new(max_frame_size=max_frame_size + 4, max_buffer_size~),
+  }
+}
+
+///|
+pub fn CheckedDecoder::feed(
+  self : CheckedDecoder,
+  chunk : Bytes,
+) -> Result[Array[Bytes], FrameError] {
+  match self.inner.feed(chunk) {
+    Err(error) => Err(error)
+    Ok(bodies) => {
+      let frames : Array[Bytes] = []
+      for body in bodies {
+        match verify_checked_body(body) {
+          Ok(payload) => frames.push(payload)
+          Err(error) => return Err(error)
+        }
+      }
+      Ok(frames)
+    }
+  }
+}
+
+///|
+pub fn CheckedDecoder::buffered(self : CheckedDecoder) -> Int {
+  self.inner.buffered()
+}
+
+///|
+pub fn CheckedDecoder::reset(self : CheckedDecoder) -> Unit {
+  self.inner.reset()
+}
+
+///|
+pub fn CheckedDecoder::finish(
+  self : CheckedDecoder,
+) -> Result[Unit, FrameError] {
+  self.inner.finish()
+}

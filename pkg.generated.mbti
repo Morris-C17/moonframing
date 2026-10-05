@@ -2,6 +2,8 @@
 package "Morris-C17/moonframing"
 
 // Values
+pub fn big_endian() -> ByteOrder
+
 pub fn crc32(Bytes) -> UInt
 
 pub fn decode_all(Bytes, max_frame_size? : Int) -> Result[Array[Bytes], FrameError]
@@ -20,13 +22,34 @@ pub fn encode_frames(ArrayView[Bytes]) -> Bytes
 
 pub fn encode_varint(Int) -> Bytes
 
+pub fn little_endian() -> ByteOrder
+
 // Errors
 
 // Types and methods
+pub enum ByteOrder {
+  BigEndian
+  LittleEndian
+}
+
+pub struct CheckedDecoder {
+  inner : Decoder
+}
+pub fn CheckedDecoder::buffered(Self) -> Int
+pub fn CheckedDecoder::feed(Self, Bytes) -> Result[Array[Bytes], FrameError]
+pub fn CheckedDecoder::finish(Self) -> Result[Unit, FrameError]
+pub fn CheckedDecoder::new(max_frame_size? : Int, max_buffer_size? : Int) -> Self
+pub fn CheckedDecoder::reset(Self) -> Unit
+
 pub struct Decoder {
   buffer : Array[Byte]
   max_frame_size : Int
   max_buffer_size : Int
+  header_value : Array[Int]
+  header_shift : Array[Int]
+  header_bytes : Array[Int]
+  frame_header_bytes : Array[Int]
+  expected_length : Array[Int]
 }
 pub fn Decoder::buffered(Self) -> Int
 pub fn Decoder::feed(Self, Bytes) -> Result[Array[Bytes], FrameError]
@@ -34,14 +57,48 @@ pub fn Decoder::finish(Self) -> Result[Unit, FrameError]
 pub fn Decoder::new(max_frame_size? : Int, max_buffer_size? : Int) -> Self
 pub fn Decoder::reset(Self) -> Unit
 
+pub struct DelimiterDecoder {
+  buffer : Array[Byte]
+  delimiter : Bytes
+  strip_delimiter : Bool
+  max_frame_size : Int
+  max_buffer_size : Int
+}
+pub fn DelimiterDecoder::buffered(Self) -> Int
+pub fn DelimiterDecoder::encode(Self, Bytes) -> Result[Bytes, FrameError]
+pub fn DelimiterDecoder::feed(Self, Bytes) -> Result[Array[Bytes], FrameError]
+pub fn DelimiterDecoder::finish(Self) -> Result[Unit, FrameError]
+pub fn DelimiterDecoder::new(Bytes, strip_delimiter? : Bool, max_frame_size? : Int, max_buffer_size? : Int) -> Result[Self, FrameError]
+pub fn DelimiterDecoder::reset(Self) -> Unit
+
 pub enum FrameError {
   NeedMore
   MalformedVarint
+  InvalidConfiguration(String)
+  LengthFieldOverflow(Int, Int)
+  InvalidLengthAdjustment(Int)
   FrameTooLarge(Int, Int)
   MissingChecksum
   ChecksumMismatch(UInt, UInt)
   BufferLimitExceeded(Int, Int)
 }
+
+pub struct LengthDelimitedCodec {
+  buffer : Array[Byte]
+  length_field_offset : Int
+  length_field_length : Int
+  length_adjustment : Int
+  num_skip : Int
+  byte_order : ByteOrder
+  max_frame_size : Int
+  max_buffer_size : Int
+}
+pub fn LengthDelimitedCodec::buffered(Self) -> Int
+pub fn LengthDelimitedCodec::encode(Self, Bytes) -> Result[Bytes, FrameError]
+pub fn LengthDelimitedCodec::feed(Self, Bytes) -> Result[Array[Bytes], FrameError]
+pub fn LengthDelimitedCodec::finish(Self) -> Result[Unit, FrameError]
+pub fn LengthDelimitedCodec::new(length_field_offset? : Int, length_field_length? : Int, length_adjustment? : Int, num_skip? : Int, byte_order? : ByteOrder, max_frame_size? : Int, max_buffer_size? : Int) -> Result[Self, FrameError]
+pub fn LengthDelimitedCodec::reset(Self) -> Unit
 
 // Type aliases
 

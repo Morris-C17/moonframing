@@ -3,6 +3,9 @@
 pub enum FrameError {
   NeedMore
   MalformedVarint
+  InvalidConfiguration(String)
+  LengthFieldOverflow(Int, Int)
+  InvalidLengthAdjustment(Int)
   FrameTooLarge(Int, Int)
   MissingChecksum
   ChecksumMismatch(UInt, UInt)
