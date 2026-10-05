@@ -1,0 +1,5 @@
+import {
+  "Morris-C17/moonframing" @frame,
+}
+
+pkgtype(kind: "executable")

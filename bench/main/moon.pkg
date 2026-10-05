@@ -1,0 +1,6 @@
+import {
+  "Morris-C17/moonframing" @frame,
+  "moonbitlang/core/bench",
+}
+
+pkgtype(kind: "executable")

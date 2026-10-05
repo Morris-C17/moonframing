@@ -18,6 +18,7 @@ jobs:
       - run: moon build --deny-warn --target ${{ matrix.target }}
       - run: moon test --deny-warn --target ${{ matrix.target }}
       - run: moon run examples/basic --target ${{ matrix.target }}
+      - run: moon run examples/codecs --target ${{ matrix.target }}
 
   package:
     runs-on: ubuntu-latest
