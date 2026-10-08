@@ -446,3 +446,111 @@ test "decoder finish distinguishes a parsed header from an idle decoder" {
     _ => fail("reset decoder must be idle")
   }
 }
+
+///|
+test "fragmentation matrix keeps uLEB128 frame output stable" {
+  let wire = @moonframing.encode_frame(b"matrix")
+  for split = 0; split <= wire.length(); split = split + 1 {
+    let decoder = @moonframing.Decoder::new()
+    let output : Array[Bytes] = []
+    match decoder.feed(wire[:split].to_owned()) {
+      Ok(frames) =>
+        for frame in frames {
+          output.push(frame)
+        }
+      Err(_) => fail("uleb first fragment")
+    }
+    match decoder.feed(wire[split:].to_owned()) {
+      Ok(frames) =>
+        for frame in frames {
+          output.push(frame)
+        }
+      Err(_) => fail("uleb second fragment")
+    }
+    inspect(output.length(), content="1")
+    inspect(output[0] == b"matrix", content="true")
+  }
+}
+
+///|
+test "fragmentation matrix keeps fixed length output stable" {
+  let wire = b"\x00\x06matrix"
+  for split = 0; split <= wire.length(); split = split + 1 {
+    let codec = match
+      @moonframing.LengthDelimitedCodec::new(length_field_length=2) {
+      Ok(codec) => codec
+      Err(_) => fail("valid fixed codec")
+    }
+    let output : Array[Bytes] = []
+    match codec.feed(wire[:split].to_owned()) {
+      Ok(frames) =>
+        for frame in frames {
+          output.push(frame)
+        }
+      Err(_) => fail("fixed first fragment")
+    }
+    match codec.feed(wire[split:].to_owned()) {
+      Ok(frames) =>
+        for frame in frames {
+          output.push(frame)
+        }
+      Err(_) => fail("fixed second fragment")
+    }
+    inspect(output.length(), content="1")
+    inspect(output[0] == b"matrix", content="true")
+  }
+}
+
+///|
+test "fragmentation matrix keeps delimiter output stable" {
+  let wire = b"alpha\r\nbeta\r\n"
+  for split = 0; split <= wire.length(); split = split + 1 {
+    let codec = match @moonframing.DelimiterDecoder::new(b"\r\n") {
+      Ok(codec) => codec
+      Err(_) => fail("valid delimiter codec")
+    }
+    let output : Array[Bytes] = []
+    match codec.feed(wire[:split].to_owned()) {
+      Ok(frames) =>
+        for frame in frames {
+          output.push(frame)
+        }
+      Err(_) => fail("delimiter first fragment")
+    }
+    match codec.feed(wire[split:].to_owned()) {
+      Ok(frames) =>
+        for frame in frames {
+          output.push(frame)
+        }
+      Err(_) => fail("delimiter second fragment")
+    }
+    inspect(output.length(), content="2")
+    inspect(output[0] == b"alpha", content="true")
+    inspect(output[1] == b"beta", content="true")
+  }
+}
+
+///|
+test "fragmentation matrix keeps checked frame output stable" {
+  let wire = @moonframing.encode_checked_frame(b"matrix")
+  for split = 0; split <= wire.length(); split = split + 1 {
+    let decoder = @moonframing.CheckedDecoder::new()
+    let output : Array[Bytes] = []
+    match decoder.feed(wire[:split].to_owned()) {
+      Ok(frames) =>
+        for frame in frames {
+          output.push(frame)
+        }
+      Err(_) => fail("checked first fragment")
+    }
+    match decoder.feed(wire[split:].to_owned()) {
+      Ok(frames) =>
+        for frame in frames {
+          output.push(frame)
+        }
+      Err(_) => fail("checked second fragment")
+    }
+    inspect(output.length(), content="1")
+    inspect(output[0] == b"matrix", content="true")
+  }
+}
